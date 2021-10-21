@@ -14,7 +14,7 @@ module.exports = {
     extend: {
       borderRadius: {
         '4xl': '32px'
-      }
+      },
     },
   },
   variants: {
@@ -23,4 +23,4 @@ module.exports = {
   plugins: [
     require('@tailwindcss/forms'),
   ],
-};
+}

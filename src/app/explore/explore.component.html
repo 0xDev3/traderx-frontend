@@ -6,8 +6,8 @@
           <div class="flex flex-col divide-y-2">
             <div *ngFor="let item of marketData"
                  class="px-1 py-2">
-              <div class="flex justify-between">
-                <div class="flex gap-4">
+              <div class="flex justify-between flex-wrap">
+                <div class="w-72 flex gap-4 flex-wrap">
                   <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
                     <img class="h-full w-full object-contain" src="https://picsum.photos/100/100?random={{ item.id }}"
                          alt="Logo">
@@ -22,11 +22,11 @@
                   </div>
                 </div>
 
-                <div class="flex gap-4">
-                  <div class="self-center font-semibold"
+                <div class="flex gap-4 flex-wrap items-center">
+                  <div class="w-20 font-semibold"
                        [ngClass]="item.priceChange24h < 0 ? 'text-red-500' : 'text-green-600'">
                     <div class="">
-                      {{ item.priceChange24h }}
+                      {{ item.priceChange24h | currencyDefault }}
                     </div>
                     <div class="flex text-xs items-center gap-1">
                       <svg width="8" height="4" viewBox="0 0 8 4" fill="currentColor" stroke="currentColor"
@@ -40,13 +40,13 @@
                     </div>
                   </div>
 
-                  <div class="self-center w-20 text-right">
+                  <div class="w-20 text-right">
                     <span class="font-semibold">
-                       {{ item.price }}
+                       {{ item.price | currencyDefault }}
                     </span>
                   </div>
 
-                  <div class="self-center">
+                  <div class="">
                     <button class="bg-blue-900 text-white px-8 py-2 rounded-full
                                    text-xs uppercase font-semibold"
                             [routerLink]="('/buy/' + item.id) | networkPath">
