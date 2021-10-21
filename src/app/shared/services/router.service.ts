@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core'
 import {NavigationExtras, Router} from '@angular/router'
 import {environment} from '../../../environments/environment'
 import {PreferenceQuery} from '../../preference/state/preference.query'
-import {NetworkPathPipe} from "../pipes/issuer-path.pipe"
+import {NetworkPathPipe} from '../pipes/issuer-path.pipe'
 
 @Injectable({
   providedIn: 'root',

@@ -8,7 +8,7 @@ import {MetamaskSubsignerService} from '../shared/services/subsigners/metamask-s
 import {MatDialogRef} from '@angular/material/dialog'
 import {RouterService} from '../shared/services/router.service'
 import {getWindow} from '../shared/utils/browser'
-import {MagicSubsignerService} from "../shared/services/subsigners/magic-subsigner.service"
+import {MagicSubsignerService} from '../shared/services/subsigners/magic-subsigner.service'
 
 @Component({
   selector: 'app-auth',

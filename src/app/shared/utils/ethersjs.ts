@@ -1,7 +1,7 @@
 import {BaseContract, providers} from 'ethers'
 import {EventFragment} from '@ethersproject/abi'
 import {fromEventPattern, Observable, of} from 'rxjs'
-import {TypedEventFilter, TypedListener} from "../../../../types/ethers-contracts/common"
+import {TypedEventFilter, TypedListener} from '../../../../types/ethers-contracts/common'
 
 export function findLog(
   receipt: providers.TransactionReceipt,

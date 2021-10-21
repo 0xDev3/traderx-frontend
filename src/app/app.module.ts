@@ -28,7 +28,7 @@ import {CurrencyPipe, DatePipe, PercentPipe, ViewportScroller} from '@angular/co
 import {CurrencyDefaultPipe} from './shared/pipes/currency-default.pipe'
 import {AuthComponent} from './auth/auth.component'
 import {HttpClientModule} from '@angular/common/http'
-import {AuthProviderNamePipe} from "./shared/pipes/auth-provider-name.pipe"
+import {AuthProviderNamePipe} from './shared/pipes/auth-provider-name.pipe'
 import {ReactiveFormsModule} from '@angular/forms'
 import {CurrencyMaskDirective} from './shared/directives/currency-mask.directive'
 import {ValueCopyComponent} from './shared/components/value-copy/value-copy.component'
@@ -48,9 +48,12 @@ import {MatSnackBarModule} from '@angular/material/snack-bar'
 import {AddButtonComponent} from './shared/components/add-button/add-button.component'
 import {FormYesNoButtonsComponent} from './shared/components/form-yes-no-buttons/form-yes-no-buttons.component'
 import {DateMaskDirective} from './shared/directives/date-mask.directive'
-import {NetworkPathPipe} from "./shared/pipes/issuer-path.pipe"
+import {NetworkPathPipe} from './shared/pipes/issuer-path.pipe'
 import {ExploreComponent} from './explore/explore.component'
-import {AuthMagicComponent} from "./auth/auth-magic/auth-magic.component"
+import {AuthMagicComponent} from './auth/auth-magic/auth-magic.component'
+import {BuyComponent} from './buy/buy.component'
+import {SellComponent} from './sell/sell.component'
+import {CurrInputDirective} from './shared/directives/curr-input.directive'
 
 @NgModule({
   declarations: [
@@ -84,8 +87,11 @@ import {AuthMagicComponent} from "./auth/auth-magic/auth-magic.component"
     AddButtonComponent,
     FormYesNoButtonsComponent,
     DateMaskDirective,
+    CurrInputDirective,
     ExploreComponent,
     AuthMagicComponent,
+    BuyComponent,
+    SellComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,128 @@
+<div class="w-full h-full flex justify-center mt-8 px-2">
+  <div class="w-full max-w-5xl">
+    <ng-container *ngIf="(stateWithStatus$ | async) as stateRes">
+      <ng-container *ngIf="stateRes.value as state">
+        <div class="max-w-md mx-auto bg-white rounded-3xl shadow-lg px-4 py-3">
+          <h2 class="uppercase font-semibold text-lg">
+            Order
+          </h2>
+
+          <form [formGroup]="buyForm">
+            <!-- Stablecoin box -->
+            <div class="mt-2 bg-gray-100 border-gray-300 border-[1px] rounded-lg p-3">
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <div class="flex rounded-full items-center bg-white shadow-md">
+                    <div class="w-6 h-6 bg-white rounded-full overflow-hidden m-1">
+                      <!-- TODO: change icon to specific stablecoin -->
+                      <img class="h-full w-full object-contain" src="/assets/usdc.png" alt="Logo">
+                    </div>
+
+                    <span class="ml-1 mr-3">
+                      {{ state.stablecoin }}
+                    </span>
+                  </div>
+                </div>
+
+                <input class="w-full text-right bg-transparent border-none focus:ring-0 font-mono text-xl"
+                       appCurrInput formControlName="stablecoinAmount"
+                       (input)="onStablecoinAmountChange()">
+              </div>
+
+              <div class="flex items-center min-h-[1rem] mt-1">
+                <ng-container *ngIf="buyForm.dirty && buyForm.invalid">
+                 <span class="text-red-600 text-xs font-semibold">
+                  <ng-container *ngIf="buyForm.errors?.walletBalanceTooLow">
+                    Not enough funds. Please top up your wallet.
+                  </ng-container>
+                </span>
+                </ng-container>
+              </div>
+
+              <div class="flex justify-between mt-5 text-xs">
+                <div>
+                  <span class="text-gray-400">
+                    Balance: {{ state.stablecoinBalance | formatUnit:'bignumToWei' | currencyDefault }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stock box -->
+            <div class="mt-2 bg-gray-100 border-gray-300 border-[1px] rounded-lg p-3">
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <div class="flex rounded-full items-center bg-white shadow-md">
+                    <div class="w-6 h-6 bg-white rounded-full overflow-hidden m-1">
+                      <img class="h-full w-full object-contain" src="https://picsum.photos/100/100" alt="Logo">
+                    </div>
+
+                    <span class="ml-1 mr-3">
+                      {{ state.stock.symbol }}
+                    </span>
+                  </div>
+                </div>
+
+                <input class="w-full text-right bg-transparent border-none focus:ring-0 font-mono text-xl"
+                       appCurrInput formControlName="stockAmount"
+                       (input)="onStockAmountChange()">
+              </div>
+
+              <div class="flex flex-col gap-2 min-h-[1rem] mt-1">
+                <ng-container *ngIf="buyForm.dirty && buyForm.invalid">
+                 <span class="text-red-600 text-xs font-semibold">
+                  <ng-container *ngIf="buyForm.errors?.stockAmountTooLow">
+                    The amount cannot be less than one share.
+                  </ng-container>
+                </span>
+                </ng-container>
+
+                <span *ngIf="isFractionalAmount(buyForm.get('stockAmount')?.value) && buyForm.valid"
+                      class="text-yellow-500 text-xs font-semibold">
+                  As fractional amounts are not supported, you
+                  will get at most {{ floorAmount(buyForm.get('stockAmount')?.value) }} share(s).
+                </span>
+              </div>
+
+              <div class="flex justify-between mt-10 text-xs">
+                <div>
+                  <span class="text-gray-400">
+                    {{ state.stock.name }}
+                  </span>
+                  <span class="font-semibold">
+                    Share price: {{ state.stock.price | currencyDefault }}
+                  </span>
+                </div>
+
+                <div>
+                  <span class="text-gray-400">
+                    Shares to issue
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button class="w-full bg-blue-900 text-white px-8 py-2 rounded-full
+                         uppercase font-semibold disabled:bg-gray-500"
+                      [disabled]="buyForm.invalid">
+                Place order
+              </button>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="stateRes.error">
+        Cannot fetch buying state.
+        <div hidden>{{ stateRes.error | json }}</div>
+      </ng-container>
+
+      <ng-container *ngIf="stateRes.loading">
+        <app-spinner type="overlay">
+          Loading...
+        </app-spinner>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

@@ -1,14 +1,14 @@
-<div class="bg-white flex w-screen flex-col transition-all lg:flex-row lg:justify-center"
+<div class="bg-blue-100 flex w-screen flex-col transition-all lg:flex-row lg:justify-center"
      [class.min-h-screen]="(isDropdownOpen$ | async)">
 
   <!-- Navbar -->
-  <div class="w-full h-16 px-4 flex justify-between sticky max-w-6xl lg:h-20"
+  <div class="w-full h-16 px-4 flex justify-between sticky max-w-5xl lg:px-0"
        [class]="(isDropdownOpen$ | async) ? 'fixed' : ''">
 
     <!-- Logo -->
     <div class="py-2">
-      <a [routerLink]="'/explore' | issuerPath">
-        <img class="h-full pl-4 py-1 object-contain" src="/assets/pon.png" alt="Logo">
+      <a [routerLink]="'/explore' | networkPath">
+        <img class="h-full pl-4 py-1 object-contain lg:pl-0" src="/assets/pon.png" alt="Logo">
       </a>
     </div>
 
@@ -16,19 +16,19 @@
     <div class="flex justify-end items-center lg:pr-4">
       <ng-container *ngFor="let navbarItem of navbarScreenLinks">
         <button *ngIf="(navbarItem.showItem | async) === true"
-                class="mx-2 px-4 py-2 text-gray-700 text-sm border-b-4 font-semibold
+                class="mx-2 px-4 py-2 text-gray-700 text-xs border-b-2 font-semibold uppercase
                          border-transparent tracking-wider whitespace-nowrap hidden lg:inline"
-                [routerLink]="navbarItem.routerLink | issuerPath"
-                routerLinkActive="!text-indigo-800 !border-indigo-800">
+                [routerLink]="navbarItem.routerLink | networkPath"
+                routerLinkActive="!text-blue-900 !border-blue-900">
           {{ navbarItem.title }}
         </button>
       </ng-container>
 
       <app-wallet-button *ngIf="(isLoggedIn$ | async) === true" class="hidden lg:flex"></app-wallet-button>
-      <button app-action-button class="transition-all lg:mx-4 px-4 py-1 border-2 border-indigo-800
+      <button app-action-button class="transition-all lg:mx-4 px-4 py-1 border-2 border-blue-900
                                          rounded-full text-sm font-semibold
-                                         text-indigo-800 whitespace-nowrap inline
-                                         hover:bg-indigo-800 hover:text-white"
+                                         text-blue-900 whitespace-nowrap inline
+                                         hover:bg-blue-900 hover:text-white"
               *ngIf="(isLoggedIn$ | async) === false"
               [onClick]="login.bind(this)"
               text="Log in"></button>
@@ -61,8 +61,8 @@
       <button *ngIf="(navbarItem.showItem | async) === true" (click)="toggleDropdown()"
               class="pt-8 pb-4 text-gray-700 text-3xl text-left whitespace-nowrap
                        border-b-8 border-transparent font-semibold"
-              [routerLink]="navbarItem.routerLink | issuerPath"
-              routerLinkActive="!text-indigo-800 !border-indigo-800">
+              [routerLink]="navbarItem.routerLink | networkPath"
+              routerLinkActive="!text-blue-900 !border-blue-900">
         {{ navbarItem.title }}
       </button>
     </ng-container>

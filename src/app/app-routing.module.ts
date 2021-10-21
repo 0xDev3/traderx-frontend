@@ -7,7 +7,9 @@ import {AuthGuard} from './shared/guards/auth.guard'
 import {environment} from '../environments/environment'
 import {NetworkGuard} from './shared/guards/network.guard'
 import {HomeComponent} from './home/home.component'
-import {ExploreComponent} from "./explore/explore.component"
+import {ExploreComponent} from './explore/explore.component'
+import {BuyComponent} from './buy/buy.component'
+import {SellComponent} from './sell/sell.component'
 
 const appRoutes: Routes = [
   {
@@ -18,6 +20,8 @@ const appRoutes: Routes = [
         path: '', canActivate: [AuthGuard], children: [
           {path: 'wallet', component: WalletComponent},
           {path: 'portfolio', component: PortfolioComponent},
+          {path: 'buy/:id', component: BuyComponent},
+          {path: 'sell/:id', component: SellComponent},
         ],
       },
     ],

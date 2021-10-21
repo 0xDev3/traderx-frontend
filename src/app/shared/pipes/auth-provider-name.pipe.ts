@@ -1,5 +1,5 @@
 import {Injectable, Pipe, PipeTransform} from '@angular/core'
-import {AuthProvider} from "../../preference/state/preference.store"
+import {AuthProvider} from '../../preference/state/preference.store'
 
 @Injectable({
   providedIn: 'root',

@@ -6,7 +6,7 @@ import {PreferenceQuery} from './preference.query'
 import {SignerService} from '../../shared/services/signer.service'
 import {MetamaskSubsignerService} from '../../shared/services/subsigners/metamask-subsigner.service'
 import {environment} from '../../../environments/environment'
-import {MagicSubsignerService} from "../../shared/services/subsigners/magic-subsigner.service"
+import {MagicSubsignerService} from '../../shared/services/subsigners/magic-subsigner.service'
 
 @Injectable({providedIn: 'root'})
 export class PreferenceService {

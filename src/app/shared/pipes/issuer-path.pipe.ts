@@ -3,7 +3,7 @@ import {PreferenceQuery} from '../../preference/state/preference.query'
 import {environment} from '../../../environments/environment'
 
 @Pipe({
-  name: 'issuerPath',
+  name: 'networkPath',
 })
 export class NetworkPathPipe implements PipeTransform {
   constructor(private preferenceQuery: PreferenceQuery) {

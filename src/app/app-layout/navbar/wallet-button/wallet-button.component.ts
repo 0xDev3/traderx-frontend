@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
-import {SessionQuery} from "../../../session/state/session.query"
+import {SessionQuery} from '../../../session/state/session.query'
 import {AuthProvider} from 'src/app/preference/state/preference.store'
-import {TailwindService} from "../../../shared/services/tailwind.service"
-import {map, startWith} from "rxjs/operators"
-import {Observable} from "rxjs"
+import {TailwindService} from '../../../shared/services/tailwind.service'
+import {map, startWith} from 'rxjs/operators'
+import {Observable} from 'rxjs'
 
 @Component({
   selector: 'app-wallet-button',

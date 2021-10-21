@@ -5,9 +5,9 @@ import {providers} from 'ethers'
 import {catchError, concatMap, map, switchMap, tap} from 'rxjs/operators'
 import {AuthProvider, PreferenceStore} from '../../../preference/state/preference.store'
 import {PreferenceQuery} from '../../../preference/state/preference.query'
-import {SDKBase} from "@magic-sdk/provider/dist/types/core/sdk"
-import {AuthMagicComponent, MagicLoginInput} from "../../../auth/auth-magic/auth-magic.component"
-import {MatDialog} from "@angular/material/dialog"
+import {SDKBase} from '@magic-sdk/provider/dist/types/core/sdk'
+import {AuthMagicComponent, MagicLoginInput} from '../../../auth/auth-magic/auth-magic.component'
+import {MatDialog} from '@angular/material/dialog'
 
 @Injectable({
   providedIn: 'root',

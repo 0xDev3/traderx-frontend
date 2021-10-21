@@ -17,7 +17,7 @@ export class CurrencyMaskDirective extends NGXDirective implements OnInit {
     align: 'right',
     allowNegative: false,
     allowZero: true,
-    decimal: ".",
+    decimal: '.',
     precision: 2,
     prefix: '$',
     suffix: '',

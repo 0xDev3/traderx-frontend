@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Optional} from '@angular/core'
-import {FormBuilder, FormGroup, Validators} from "@angular/forms"
-import {MatDialogRef} from "@angular/material/dialog"
-import {BackendUserService} from "../../shared/services/backend/backend-user.service"
+import {FormBuilder, FormGroup, Validators} from '@angular/forms'
+import {MatDialogRef} from '@angular/material/dialog'
+import {BackendUserService} from '../../shared/services/backend/backend-user.service'
 
 @Component({
   selector: 'app-auth-magic',
