@@ -28,7 +28,7 @@ export class CurrInputDirective implements ControlValueAccessor {
   }
 
   @HostBinding() disabled = false
-  @HostBinding('inputmode') inputMode = 'numeric'
+  @HostBinding('attr.inputmode') inputMode = 'decimal'
   @HostBinding('autocomplete') autoComplete = 'off'
   @HostBinding('type') type = 'text'
   @HostBinding('pattern') pattern = '^[0-9]*[.,]?[0-9]*$'
