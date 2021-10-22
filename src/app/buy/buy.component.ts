@@ -7,6 +7,7 @@ import {BigNumber} from 'ethers'
 import {StablecoinService} from '../shared/services/blockchain/stablecoin.service'
 import {BackendBrokerService, MarketDataItem} from '../shared/services/backend/backend-broker.service'
 import {withStatus, WithStatus} from '../shared/utils/observables'
+import {BuyService} from './buy.service'
 
 @Component({
   selector: 'app-buy',
@@ -15,6 +16,7 @@ import {withStatus, WithStatus} from '../shared/utils/observables'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BuyComponent implements OnInit {
+  id!: number
   buyForm!: FormGroup
   state$!: Observable<BuyState>
   stateWithStatus$!: Observable<WithStatus<BuyState>>
@@ -22,16 +24,17 @@ export class BuyComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private stablecoin: StablecoinService,
               private backendBrokerService: BackendBrokerService,
+              private buyService: BuyService,
               private fb: FormBuilder) {
   }
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.params.id)
+    this.id = Number(this.route.snapshot.params.id)
 
     this.state$ = combineLatest([
       of(this.stablecoin.symbol),
       this.stablecoin.balance$,
-      this.backendBrokerService.getMarketDataItem(id)
+      this.backendBrokerService.getMarketDataItem(this.id)
     ]).pipe(
       map(([stablecoin, stablecoinBalance, stock]) => ({stablecoin, stablecoinBalance, stock})),
       shareReplay(1)
@@ -90,6 +93,12 @@ export class BuyComponent implements OnInit {
 
   isFractionalAmount(amount: any) {
     return Number(amount) != this.floorAmount(amount)
+  }
+
+  placeOrder() {
+    const stablecoinAmount = this.stablecoin.parse(this.buyForm.value.stablecoinAmount)
+
+    return this.buyService.placeOrder(this.id, stablecoinAmount)
   }
 }
 

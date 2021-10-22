@@ -74,18 +74,17 @@ export class StablecoinService {
     return parseUnits(String(roundedAmount), precision ?? this.precision)
   }
 
-  getAllowance(campaignAddress: string): Observable<number> {
+  getAllowance(address: string): Observable<BigNumber> {
     return combineLatest([
       this.contract$,
       this.signerService.ensureAuth,
     ]).pipe(
       switchMap(([contract, _signer]) =>
-        contract.allowance(this.sessionQuery.getValue().address!, campaignAddress)),
-      map(res => this.format(res)),
+        contract.allowance(this.sessionQuery.getValue().address!, address)),
     )
   }
 
-  approveAmount(campaignAddress: string, amount: number): Observable<unknown> {
+  approveAmount(address: string, amount: BigNumber): Observable<unknown> {
     return combineLatest([
       this.contract$,
       this.signerService.ensureAuth,
@@ -93,7 +92,7 @@ export class StablecoinService {
       map(([contract, signer]) => contract.connect(signer)),
       switchMap(contract => combineLatest([of(contract), this.gasService.overrides])),
       switchMap(([contract, overrides]) =>
-        contract.populateTransaction.approve(campaignAddress, this.parse(amount), overrides),
+        contract.populateTransaction.approve(address, amount, overrides),
       ),
       switchMap(tx => this.signerService.sendTransaction(tx)),
       switchMap(tx => this.dialogService.loading(

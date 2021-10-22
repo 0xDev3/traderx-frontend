@@ -116,7 +116,7 @@ export class SignerService {
     Observable<providers.TransactionResponse> {
     return this.ensureAuth.pipe(
       switchMap(signer => from(signer.sendTransaction(transaction))),
-      this.errorService.handleError(),
+      this.errorService.handleError(false, true),
     )
   }
 
