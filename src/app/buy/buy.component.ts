@@ -36,7 +36,7 @@ export class BuyComponent implements OnInit {
       this.stablecoin.balance$,
       this.backendBrokerService.getMarketDataItem(this.id)
     ]).pipe(
-      map(([stablecoin, stablecoinBalance, stock]) => ({stablecoin, stablecoinBalance, stock})),
+      map(([stablecoinSymbol, stablecoinBalance, stock]) => ({stablecoinSymbol, stablecoinBalance, stock})),
       shareReplay(1)
     )
     this.stateWithStatus$ = withStatus(this.state$)
@@ -103,7 +103,7 @@ export class BuyComponent implements OnInit {
 }
 
 interface BuyState {
-  stablecoin: string,
+  stablecoinSymbol: string,
   stablecoinBalance: BigNumber,
   stock: MarketDataItem
 }

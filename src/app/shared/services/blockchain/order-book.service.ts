@@ -44,4 +44,26 @@ export class OrderBookService {
       )),
     )
   }
+
+  createSellOrder(stockId: number, stockAmount: BigNumber): Observable<unknown> {
+    return combineLatest([
+      this.contract$,
+      this.signerService.ensureAuth,
+    ]).pipe(
+      map(([contract, signer]) => contract.connect(signer)),
+      switchMap(contract => combineLatest([of(contract), this.gasService.overrides])),
+      switchMap(([contract, overrides]) =>
+        contract.populateTransaction.createSellOrder(String(stockId), stockAmount, overrides),
+      ),
+      switchMap(tx => this.signerService.sendTransaction(tx)),
+      switchMap(tx => this.dialogService.loading(
+        from(this.sessionQuery.provider.waitForTransaction(tx.hash)),
+        'Processing transaction...',
+      )),
+    )
+  }
+
+  getStockAddress(stockId: number): Observable<string> {
+    return of('') // TODO: implement this when available at contract level
+  }
 }

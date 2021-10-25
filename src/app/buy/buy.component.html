@@ -4,7 +4,7 @@
       <ng-container *ngIf="stateRes.value as state">
         <div class="max-w-md mx-auto bg-white rounded-3xl shadow-lg px-4 py-3">
           <h2 class="uppercase font-semibold text-lg">
-            Order
+            Buy Order
           </h2>
 
           <form [formGroup]="buyForm">
@@ -19,7 +19,7 @@
                     </div>
 
                     <span class="ml-1 mr-3">
-                      {{ state.stablecoin }}
+                      {{ state.stablecoinSymbol }}
                     </span>
                   </div>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="flex items-center">
                   <div class="flex rounded-full items-center bg-white shadow-md">
                     <div class="w-6 h-6 bg-white rounded-full overflow-hidden m-1">
-                      <img class="h-full w-full object-contain" src="https://picsum.photos/100/100" alt="Logo">
+                      <img class="h-full w-full object-contain" src="/assets/stock.png" alt="Logo">
                     </div>
 
                     <span class="ml-1 mr-3">

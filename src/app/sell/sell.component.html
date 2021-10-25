@@ -1,1 +1,99 @@
-<p>sell works!</p>
+<div class="w-full h-full flex justify-center mt-8 px-2">
+  <div class="w-full max-w-5xl">
+    <ng-container *ngIf="(stateWithStatus$ | async) as stateRes">
+      <ng-container *ngIf="stateRes.value as state">
+        <div class="max-w-md mx-auto bg-white rounded-3xl shadow-lg px-4 py-3">
+          <h2 class="uppercase font-semibold text-lg">
+            Sell Order
+          </h2>
+
+          <form [formGroup]="sellForm">
+            <!-- Stock box -->
+            <div class="mt-2 bg-gray-100 border-gray-300 border-[1px] rounded-lg p-3">
+              <div class="flex justify-between">
+                <div class="flex items-center">
+                  <div class="flex rounded-full items-center bg-white shadow-md">
+                    <div class="w-6 h-6 bg-white rounded-full overflow-hidden m-1">
+                      <img class="h-full w-full object-contain" src="/assets/stock.png" alt="Logo">
+                    </div>
+
+                    <span class="ml-1 mr-3">
+                      {{ state.stock.symbol }}
+                    </span>
+                  </div>
+                </div>
+
+                <input class="w-full text-right bg-transparent border-none focus:ring-0 font-mono text-xl"
+                       appCurrInput formControlName="stockAmount" placeholder="0">
+              </div>
+
+              <div class="flex flex-col gap-2 min-h-[1rem] mt-1">
+                <ng-container *ngIf="sellForm.dirty && sellForm.invalid">
+                 <span class="text-red-600 text-xs font-semibold">
+                   <ng-container *ngIf="sellForm.errors?.stockAmountTooLow">
+                     The amount cannot be less than one share.
+                   </ng-container>
+                   <ng-container *ngIf="sellForm.errors?.overBalance">
+                     Not enough shares to sell.
+                   </ng-container>
+                   <ng-container *ngIf="sellForm.errors?.fractionalNotAllowed">
+                     Fractional shares are not allowed. Enter whole numbers.
+                   </ng-container>
+                </span>
+                </ng-container>
+              </div>
+
+              <div class="flex justify-between mt-10 text-xs">
+                <div class="flex gap-2 flex-wrap">
+                  <span class="text-gray-400">
+                    {{ state.stock.name }}
+                  </span>
+                  <span class="font-semibold">
+                    Share price: {{ state.stock.price | currencyDefault }}
+                  </span>
+                </div>
+
+                <div>
+                  <span class="text-gray-400">
+                    Shares to sell
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-2">
+                Your shares balance: {{ state.stockBalance | formatUnit:'bignumToWei':18 }} {{ state.stock.symbol }}
+              </div>
+
+              <div class="mt-2 min-h-[1.5rem]">
+                <ng-container *ngIf="sellForm.valid">
+                  You will get {{ stablecoinAmount(state) | currencyDefault }}
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <button app-action-button
+                      class="w-full bg-blue-900 text-white px-8 py-2 rounded-full
+                         uppercase font-semibold disabled:bg-gray-500"
+                      text="Place order"
+                      [onClick]="this.placeOrder(state).bind(this)"
+                      [disabled]="sellForm.invalid">
+              </button>
+            </div>
+          </form>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="stateRes.error">
+        Cannot fetch selling state.
+        <div hidden>{{ stateRes.error | json }}</div>
+      </ng-container>
+
+      <ng-container *ngIf="stateRes.loading">
+        <app-spinner type="overlay">
+          Loading...
+        </app-spinner>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
