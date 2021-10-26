@@ -26,12 +26,12 @@ export class SellService {
   }
 
   placeOrder(data: PlaceOrderData) {
-    return this.orderBookService.getStockAddress(data.stockId).pipe(
+    return this.orderBookService.getStockAddress(String(data.stockId)).pipe(
       switchMap(stockAddress => this.stockService.getAllowance(stockAddress).pipe(
-        switchMap(allowance => allowance.lt(data.stockAmount) ?
-          this.approveAmount(stockAddress, data.stockAmount) : of(allowance)
+        switchMap(allowance => allowance.lt(data.amount) ?
+          this.approveAmount(stockAddress, data.amount) : of(allowance)
         ),
-        switchMap(() => this.orderBookService.createSellOrder(data.stockId, data.stockAmount)),
+        switchMap(() => this.orderBookService.createSellOrder(data, data.amount)),
         switchMap(() => this.dialogService.success('Order created successfully!')),
         switchMap(() => this.router.navigate(['/portfolio']))
       )),
@@ -43,9 +43,9 @@ export class SellService {
   }
 }
 
-export interface PlaceOrderData {
-  stockId: number,
-  stockAmount: BigNumber,
-  stockTicker: string,
-  stockName: string,
+interface PlaceOrderData {
+  stockId: string
+  stockName: string
+  stockSymbol: string
+  amount: BigNumber
 }

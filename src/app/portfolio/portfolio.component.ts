@@ -1,8 +1,12 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
 import {SessionQuery} from '../session/state/session.query'
-import {BehaviorSubject} from 'rxjs'
 import {DialogService} from '../shared/services/dialog.service'
-import {StablecoinService} from '../shared/services/blockchain/stablecoin.service'
+import {WithStatus, withStatus} from '../shared/utils/observables'
+import {SignerService} from '../shared/services/signer.service'
+import {BackendBrokerService, ItemExtended} from '../shared/services/backend/backend-broker.service'
+import {Order, OrderBookService, PortfolioItem} from '../shared/services/blockchain/order-book.service'
+import {switchMap} from 'rxjs/operators'
+import {Observable} from 'rxjs'
 
 @Component({
   selector: 'app-portfolio',
@@ -11,10 +15,22 @@ import {StablecoinService} from '../shared/services/blockchain/stablecoin.servic
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortfolioComponent {
-  portfolioSub = new BehaviorSubject<void>(undefined)
+  pending$: Observable<WithStatus<ItemExtended<Order>[]>> = withStatus(
+    this.orderBookService.pending$.pipe(
+      switchMap(portfolio => this.backendBrokerService.extendPending(portfolio)),
+    )
+  )
+
+  portfolio$: Observable<WithStatus<ItemExtended<PortfolioItem>[]>> = withStatus(
+    this.orderBookService.portfolio$.pipe(
+      switchMap(portfolio => this.backendBrokerService.extendPortfolio(portfolio)),
+    )
+  )
 
   constructor(private sessionQuery: SessionQuery,
-              private dialogService: DialogService,
-              private stablecoin: StablecoinService) {
+              private signerService: SignerService,
+              private orderBookService: OrderBookService,
+              private backendBrokerService: BackendBrokerService,
+              private dialogService: DialogService) {
   }
 }

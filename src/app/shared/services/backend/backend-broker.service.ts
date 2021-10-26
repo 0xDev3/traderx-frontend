@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core'
-import {Observable, of} from 'rxjs'
+import {combineLatest, Observable, of} from 'rxjs'
 import {BackendHttpClient} from './backend-http-client.service'
-import {delay, first} from 'rxjs/operators'
+import {delay, first, map} from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +16,34 @@ export class BackendBrokerService {
     )
   }
 
-  getMarketDataItem(id: number): Observable<MarketDataItem> {
+  getMarketDataItem(id: string): Observable<MarketDataItem> {
     return of(...this.dummyMarketData).pipe(
-      first(item => item.id === id)
+      first(item => String(item.id) === id)
     )
+  }
+
+  extendPortfolio<T extends StockItemable>(portfolio: T[]): Observable<ItemExtended<T>[]> {
+    return portfolio.length === 0 ? of([]) : combineLatest(portfolio.map(portfolioItem => {
+      return this.getMarketDataItem(portfolioItem.stockId).pipe(
+        map(marketDataItem => ({
+          item: portfolioItem,
+          price: marketDataItem.price,
+          priceChange24h: marketDataItem.priceChange24h,
+        })),
+      )
+    }))
+  }
+
+  extendPending<T extends StockItemable>(pending: T[]): Observable<ItemExtended<T>[]> {
+    return pending.length === 0 ? of([]) : combineLatest(pending.map(pendingItem => {
+      return this.getMarketDataItem(pendingItem.stockId).pipe(
+        map(marketDataItem => ({
+          item: pendingItem,
+          price: marketDataItem.price,
+          priceChange24h: marketDataItem.priceChange24h,
+        })),
+      )
+    }))
   }
 
   get dummyMarketData(): MarketDataItem[] {
@@ -81,6 +105,16 @@ export interface MarketDataItem {
   id: number
   symbol: string
   name: string
+  priceChange24h: number
+  price: number
+}
+
+interface StockItemable {
+  stockId: string
+}
+
+export interface ItemExtended<T> {
+  item: T
   priceChange24h: number
   price: number
 }

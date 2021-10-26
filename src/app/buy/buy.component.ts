@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit, ɵmarkDirty} from '@angular/core'
 import {ActivatedRoute} from '@angular/router'
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms'
-import {map, shareReplay, take, tap} from 'rxjs/operators'
+import {map, shareReplay, switchMap, take, tap} from 'rxjs/operators'
 import {combineLatest, Observable, of} from 'rxjs'
 import {BigNumber} from 'ethers'
 import {StablecoinService} from '../shared/services/blockchain/stablecoin.service'
@@ -34,7 +34,7 @@ export class BuyComponent implements OnInit {
     this.state$ = combineLatest([
       of(this.stablecoin.symbol),
       this.stablecoin.balance$,
-      this.backendBrokerService.getMarketDataItem(this.id)
+      this.backendBrokerService.getMarketDataItem(String(this.id))
     ]).pipe(
       map(([stablecoinSymbol, stablecoinBalance, stock]) => ({stablecoinSymbol, stablecoinBalance, stock})),
       shareReplay(1)
@@ -98,7 +98,14 @@ export class BuyComponent implements OnInit {
   placeOrder() {
     const stablecoinAmount = this.stablecoin.parse(this.buyForm.value.stablecoinAmount)
 
-    return this.buyService.placeOrder(this.id, stablecoinAmount)
+    return combineLatest([this.state$]).pipe(take(1),
+      switchMap(([state]) => this.buyService.placeOrder({
+        stockId: String(state.stock.id),
+        stockName: state.stock.name,
+        stockSymbol: state.stock.symbol,
+        amount: stablecoinAmount
+      }))
+    )
   }
 }
 

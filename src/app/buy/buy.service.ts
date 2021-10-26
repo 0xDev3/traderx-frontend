@@ -21,12 +21,12 @@ export class BuyService {
   ) {
   }
 
-  placeOrder(stockId: number, stablecoinAmount: BigNumber) {
+  placeOrder(stock: PlaceOrderData) {
     return this.getAllowance.pipe(
-      switchMap(allowance => allowance.lt(stablecoinAmount) ?
-        this.approveAmount(stablecoinAmount) : of(allowance)
+      switchMap(allowance => allowance.lt(stock.amount) ?
+        this.approveAmount(stock.amount) : of(allowance)
       ),
-      switchMap(() => this.orderBookService.createBuyOrder(stockId, stablecoinAmount)),
+      switchMap(() => this.orderBookService.createBuyOrder(stock, stock.amount)),
       switchMap(() => this.dialogService.success('Order created successfully!')),
       switchMap(() => this.router.navigate(['/portfolio']))
     )
@@ -41,4 +41,11 @@ export class BuyService {
       this.preferenceQuery.network.orderBook, amount,
     )
   }
+}
+
+interface PlaceOrderData {
+  stockId: string
+  stockName: string
+  stockSymbol: string
+  amount: BigNumber
 }

@@ -1,5 +1,142 @@
-<div class="w-full h-full flex justify-center mt-8 px-2 pb-8">
-  <div class="w-full max-w-6xl">
-    Portfolio here
+<div class="w-full h-full flex justify-center mt-8 px-2">
+  <div class="w-full max-w-5xl">
+    <div class="max-w-2xl mx-auto">
+      <ng-container *ngIf="(pending$ | async) as pendingRes">
+        <ng-container *ngIf="pendingRes.value as pendingData">
+          <ng-container *ngIf="pendingData.length !== 0">
+            <h2 class="py-2 uppercase">
+              Pending orders
+            </h2>
+
+            <div class="flex flex-col divide-y-2">
+              <div *ngFor="let item of pendingData"
+                   class="px-1 py-2">
+                <div class="flex justify-between flex-wrap">
+                  <div class="w-72 flex gap-4 flex-wrap">
+                    <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+                      <img class="h-full w-full object-contain"
+                           src="/assets/stock.png"
+                           alt="Logo">
+                    </div>
+                    <div class="self-center">
+                    <span class="font-semibold">
+                      {{ item.item.stockSymbol }}
+                    </span>
+                      <div class="text-xs">
+                        {{ item.item.stockName }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-4 flex-wrap items-center">
+                    <div class="w-20 text-right">
+                    <span class="font-semibold">
+                      <ng-container *ngIf="item.item.orderType === 0">
+                        to buy for {{ item.item.amount | formatUnit:'bignumToWei' | currencyDefault }}
+                      </ng-container>
+
+                      <ng-container *ngIf="item.item.orderType === 1">
+                        to sell {{ item.item.amount | formatUnit:'bignumToWei' }} share(s)
+                      </ng-container>
+                    </span>
+                    </div>
+
+                    <div class="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="pendingRes.error">
+          Cannot fetch pending orders.
+          <div hidden>{{ pendingRes.error | json }}</div>
+        </ng-container>
+
+        <ng-container *ngIf="pendingRes.loading">
+        </ng-container>
+      </ng-container>
+
+      <h2 class="py-2 uppercase">
+        In your portfolio
+      </h2>
+
+      <ng-container *ngIf="(portfolio$ | async) as portfolioRes">
+        <ng-container *ngIf="portfolioRes.value as portfolioData">
+          <div class="flex flex-col divide-y-2">
+            <div *ngFor="let item of portfolioData"
+                 class="px-1 py-2">
+              <div class="flex justify-between flex-wrap">
+                <div class="w-72 flex gap-4 flex-wrap">
+                  <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+                    <img class="h-full w-full object-contain"
+                         src="/assets/stock.png"
+                         alt="Logo">
+                  </div>
+                  <div class="self-center">
+                    <span class="font-semibold">
+                      {{ item.item.stockSymbol }}
+                    </span>
+                    <div class="text-xs">
+                      {{ item.item.stockName }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex gap-4 flex-wrap items-center">
+                  <div class="w-20 font-semibold"
+                       [ngClass]="item.priceChange24h < 0 ? 'text-red-500' : 'text-green-600'">
+                    <div class="">
+                      {{ item.priceChange24h | currencyDefault }}
+                    </div>
+                    <div class="flex text-xs items-center gap-1">
+                      <svg width="8" height="4" viewBox="0 0 8 4" fill="currentColor" stroke="currentColor"
+                           [ngClass]="item.priceChange24h < 0 ? 'rotate-180' : 'rotate-0'"
+                           xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 4L8 4L4 3.65565e-07L0 4Z"/>
+                      </svg>
+                      <span class="">
+                        ({{ (item.price / (item.price - item.priceChange24h)) - 1  | percent:'1.2-2' }})
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="w-20 text-right">
+                    <span class="font-semibold">
+                       {{ item.item.balance | formatUnit:'bignumToWei' | number }}
+                    </span>
+                  </div>
+
+                  <div class="">
+                    <button class="bg-blue-900 text-white px-8 py-2 rounded-full
+                                   text-xs uppercase font-semibold"
+                            [routerLink]="('/sell/' + item.item.stockId) | networkPath">
+                      Sell
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngIf="portfolioData.length === 0">
+            <div class="flex justify-center py-4">
+              Your portfolio is empty.
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="portfolioRes.error">
+          Cannot fetch portfolio data.
+          <div hidden>{{ portfolioRes.error | json }}</div>
+        </ng-container>
+
+        <ng-container *ngIf="portfolioRes.loading">
+          <app-spinner type="overlay">Loading portfolio data</app-spinner>
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>

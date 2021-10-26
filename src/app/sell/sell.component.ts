@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, OnInit, ɵmarkDirty} from '@angular/core'
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors} from '@angular/forms'
-import {combineLatest, Observable, of} from 'rxjs'
+import {combineLatest, Observable} from 'rxjs'
 import {withStatus, WithStatus} from '../shared/utils/observables'
 import {BigNumber} from 'ethers'
 import {BackendBrokerService, MarketDataItem} from '../shared/services/backend/backend-broker.service'
 import {ActivatedRoute} from '@angular/router'
 import {StablecoinService} from '../shared/services/blockchain/stablecoin.service'
-import {map, shareReplay, take, tap} from 'rxjs/operators'
+import {map, shareReplay, switchMap, take, tap} from 'rxjs/operators'
 import {SellService} from './sell.service'
 import {StockService} from '../shared/services/blockchain/stock.service'
 import {OrderBookService} from '../shared/services/blockchain/order-book.service'
@@ -37,8 +37,10 @@ export class SellComponent implements OnInit {
     this.id = Number(this.route.snapshot.params.id)
 
     this.state$ = combineLatest([
-      this.getStockBalance(this.id),
-      this.backendBrokerService.getMarketDataItem(this.id)
+      this.orderBookService.getStockAddress(String(this.id)).pipe(
+        switchMap(stockAddress => this.stockService.balance(stockAddress))
+      ),
+      this.backendBrokerService.getMarketDataItem(String(this.id))
     ]).pipe(
       map(([stockBalance, stock]) => ({stockBalance, stock})),
       shareReplay(1)
@@ -71,28 +73,19 @@ export class SellComponent implements OnInit {
     )
   }
 
-  private getStockBalance(stockId: number): Observable<BigNumber> {
-    // TODO: uncomment this when it will be available on backend
-    // return this.orderBookService.getStockAddress(stockId).pipe(
-    //   switchMap(stockAddress => this.stockService.balance(stockAddress))
-    // )
-
-    return of(parseUnits(String(4)))
-  }
-
   stablecoinAmount(state: SellState): number {
     return state.stock.price * this.sellForm.value.stockAmount
   }
 
   placeOrder(state: SellState) {
     return () => {
-      const stockAmount = this.stablecoin.parse(this.sellForm.value.stablecoinAmount, 18)
+      const stockAmount = this.stablecoin.parse(this.sellForm.value.stockAmount, 18)
 
       return this.sellService.placeOrder({
-        stockAmount: stockAmount,
-        stockId: this.id,
+        stockId: String(this.id),
         stockName: state.stock.name,
-        stockTicker: state.stock.symbol
+        stockSymbol: state.stock.symbol,
+        amount: stockAmount,
       })
     }
   }
