@@ -5,6 +5,7 @@ export enum ChainID {
   MUMBAI_TESTNET = 80001, // Polygon
   // ETHEREUM_MAINNET = 1,
   // GOERLI_TESTNET = 5,
+  AURORA_TESTNET = 1313161555
 }
 
 export interface Network {
@@ -37,8 +38,24 @@ export const MumbaiNetwork: Network = {
   explorerURLs: ['https://mumbai.polygonscan.com/'],
 }
 
+export const AuroraTestnetNetwork: Network = {
+  chainID: ChainID.AURORA_TESTNET,
+  name: 'Aurora Testnet',
+  shortName: 'aurora',
+  nativeCurrency: {
+    name: 'ETH',
+    symbol: 'ETH',
+  },
+  defaultStableCoin: '0xF08b55025bC17073043a66100479e673eB8d90f1',
+  orderBook: '0x85c2Ed09700b345D7D06047DaeeBCb70421eC34E',
+  maxGasPrice: 20,
+  rpcURLs: ['https://testnet.aurora.dev'],
+  explorerURLs: ['https://explorer.testnet.aurora.dev/'],
+}
+
 export const Networks: { [key in ChainID]: Network } = {
   [ChainID.MUMBAI_TESTNET]: MumbaiNetwork,
+  [ChainID.AURORA_TESTNET]: AuroraTestnetNetwork,
 }
 
 const getEthersNetwork = (network: Network): providers.Network => ({

@@ -14,12 +14,20 @@ export class BackendBrokerService {
     return of(this.dummyMarketData).pipe(
       delay(800)
     )
+
+    // TODO: Uncomment this when the endpoint will be available
+    // return this.http.get<MarketData>(`${environment.backendURL}/stocks`).pipe(
+    //   map(res => res.stocks)
+    // )
   }
 
   getMarketDataItem(id: string): Observable<MarketDataItem> {
     return of(...this.dummyMarketData).pipe(
       first(item => String(item.id) === id)
     )
+
+    // TODO: Uncomment this when the endpoint will be available
+    // return this.http.get<MarketDataItem>(`${environment.backendURL}/stocks/${id}`)
   }
 
   extendPortfolio<T extends StockItemable>(portfolio: T[]): Observable<ItemExtended<T>[]> {
@@ -101,12 +109,16 @@ export class BackendBrokerService {
   }
 }
 
+interface MarketData {
+  stocks: MarketDataItem[]
+}
+
 export interface MarketDataItem {
   id: number
-  symbol: string
   name: string
-  priceChange24h: number
   price: number
+  priceChange24h: number
+  symbol: string
 }
 
 interface StockItemable {
@@ -115,6 +127,6 @@ interface StockItemable {
 
 export interface ItemExtended<T> {
   item: T
-  priceChange24h: number
   price: number
+  priceChange24h: number
 }
