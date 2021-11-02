@@ -83,13 +83,14 @@ export class OrderBookService {
   changes$: Observable<OrderBook> = combineLatest([
     this.contract$,
     this.signerService.ensureAuth,
+    this.sessionQuery.address$,
   ]).pipe(
     map(([contract, _signer]) => contract),
     switchMap(contract => merge(
       of(undefined),
-      contractEvent(contract, contract.filters.BuyOrderCreated(this.preferenceQuery.getValue().address!)),
-      contractEvent(contract, contract.filters.SellOrderCreated(this.preferenceQuery.getValue().address!)),
-      contractEvent(contract, contract.filters.OrderSettled(this.preferenceQuery.getValue().address!)),
+      contractEvent(contract, contract.filters.BuyOrderCreated(this.sessionQuery.getValue().address!)),
+      contractEvent(contract, contract.filters.SellOrderCreated(this.sessionQuery.getValue().address!)),
+      contractEvent(contract, contract.filters.OrderSettled(this.sessionQuery.getValue().address!)),
     ).pipe(
       map(() => contract),
       share()
@@ -97,11 +98,11 @@ export class OrderBookService {
   )
 
   portfolio$: Observable<PortfolioItem[]> = this.changes$.pipe(
-    switchMap(contract => contract.getPortfolio(this.preferenceQuery.getValue().address!)),
+    switchMap(contract => contract.getPortfolio(this.sessionQuery.getValue().address!)),
   )
 
   pending$: Observable<Order[]> = this.changes$.pipe(
-    switchMap(contract => contract.getPending(this.preferenceQuery.getValue().address!)),
+    switchMap(contract => contract.getPending(this.sessionQuery.getValue().address!)),
   )
 }
 

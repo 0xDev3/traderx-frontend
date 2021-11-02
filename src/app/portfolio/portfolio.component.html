@@ -12,7 +12,7 @@
               <div *ngFor="let item of pendingData"
                    class="px-1 py-2">
                 <div class="flex justify-between flex-wrap">
-                  <div class="w-72 flex gap-4 flex-wrap">
+                  <div class="w-48 flex gap-4 flex-wrap">
                     <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
                       <img class="h-full w-full object-contain"
                            src="/assets/stock.png"
@@ -69,7 +69,7 @@
             <div *ngFor="let item of portfolioData"
                  class="px-1 py-2">
               <div class="flex justify-between flex-wrap">
-                <div class="w-72 flex gap-4 flex-wrap">
+                <div class="w-48 flex gap-4 flex-wrap">
                   <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
                     <img class="h-full w-full object-contain"
                          src="/assets/stock.png"
@@ -86,31 +86,17 @@
                 </div>
 
                 <div class="flex gap-4 flex-wrap items-center">
-                  <div class="w-20 font-semibold"
-                       [ngClass]="item.priceChange24h < 0 ? 'text-red-500' : 'text-green-600'">
-                    <div class="">
-                      {{ item.priceChange24h | currencyDefault }}
-                    </div>
-                    <div class="flex text-xs items-center gap-1">
-                      <svg width="8" height="4" viewBox="0 0 8 4" fill="currentColor" stroke="currentColor"
-                           [ngClass]="item.priceChange24h < 0 ? 'rotate-180' : 'rotate-0'"
-                           xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 4L8 4L4 3.65565e-07L0 4Z"/>
-                      </svg>
-                      <span class="">
-                        ({{ (item.price / (item.price - item.priceChange24h)) - 1  | percent:'1.2-2' }})
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="w-20 text-right">
+                  <div class="w-16 text-right flex flex-col">
                     <span class="font-semibold">
                        {{ item.item.balance | formatUnit:'bignumToWei' | number }}
+                    </span>
+                    <span class="text-xs">
+                      Shares
                     </span>
                   </div>
 
                   <div class="">
-                    <button class="bg-blue-900 text-white px-8 py-2 rounded-full
+                    <button class="bg-blue-900 text-white px-6 py-2 rounded-full
                                    text-xs uppercase font-semibold"
                             [routerLink]="('/sell/' + item.item.stockId) | networkPath">
                       Sell
@@ -134,7 +120,9 @@
         </ng-container>
 
         <ng-container *ngIf="portfolioRes.loading">
-          <app-spinner type="overlay">Loading portfolio data</app-spinner>
+          <app-spinner type="overlay">
+            Loading portfolio data
+          </app-spinner>
         </ng-container>
       </ng-container>
     </div>

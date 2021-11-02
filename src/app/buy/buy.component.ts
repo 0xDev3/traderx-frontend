@@ -18,6 +18,7 @@ import {BuyService} from './buy.service'
 export class BuyComponent implements OnInit {
   id!: number
   buyForm!: FormGroup
+
   state$!: Observable<BuyState>
   stateWithStatus$!: Observable<WithStatus<BuyState>>
 

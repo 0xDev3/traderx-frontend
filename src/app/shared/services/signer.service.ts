@@ -131,7 +131,12 @@ export class SignerService {
     this.accountsChanged$.pipe(
       concatMap((accounts) => accounts.length === 0 ? this.logoutNavToExplore() : of(accounts)),
       concatMap(() => this.sessionQuery.signer?.getAddress() || of('')),
-      tap(account => account ? this.sessionStore.update({address: account}) : null),
+      tap(account => {
+        if (account) {
+          this.sessionStore.update({address: account})
+          this.preferenceStore.update({address: account})
+        }
+      }),
     ).subscribe()
 
     this.chainChanged$.pipe(

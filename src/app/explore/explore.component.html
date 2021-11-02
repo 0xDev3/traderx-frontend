@@ -1,6 +1,9 @@
 <div class="w-full h-full flex justify-center mt-8 px-2">
   <div class="w-full max-w-5xl">
     <div class="max-w-2xl mx-auto">
+      <h2 class="py-2 uppercase">
+        Explore
+      </h2>
       <ng-container *ngIf="(marketData$ | async) as marketDataRes">
         <ng-container *ngIf="marketDataRes.value as marketData">
           <div class="flex flex-col divide-y-2">
