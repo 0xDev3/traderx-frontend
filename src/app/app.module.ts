@@ -54,6 +54,7 @@ import {AuthMagicComponent} from './auth/auth-magic/auth-magic.component'
 import {BuyComponent} from './buy/buy.component'
 import {SellComponent} from './sell/sell.component'
 import {CurrInputDirective} from './shared/directives/curr-input.directive'
+import {ExplorerLinkComponent} from './shared/components/explorer-link/explorer-link.component'
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import {CurrInputDirective} from './shared/directives/curr-input.directive'
     AuthMagicComponent,
     BuyComponent,
     SellComponent,
+    ExplorerLinkComponent,
   ],
   imports: [
     BrowserModule,

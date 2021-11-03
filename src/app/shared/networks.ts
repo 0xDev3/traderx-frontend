@@ -47,7 +47,7 @@ export const AuroraTestnetNetwork: Network = {
     symbol: 'ETH',
   },
   defaultStableCoin: '0xF08b55025bC17073043a66100479e673eB8d90f1',
-  orderBook: '0x85c2Ed09700b345D7D06047DaeeBCb70421eC34E',
+  orderBook: '0x72139d2426CDEc369269Da99A7A0D3ddc98c20F5',
   maxGasPrice: 20,
   rpcURLs: ['https://testnet.aurora.dev'],
   explorerURLs: ['https://explorer.testnet.aurora.dev/'],

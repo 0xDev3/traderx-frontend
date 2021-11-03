@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {combineLatest, from, merge, Observable, of} from 'rxjs'
-import {distinctUntilChanged, map, share, switchMap} from 'rxjs/operators'
+import {distinctUntilChanged, map, shareReplay, switchMap} from 'rxjs/operators'
 import {OrderBook, OrderBook__factory} from '../../../../../types/ethers-contracts'
 import {SessionQuery} from '../../../session/state/session.query'
 import {PreferenceQuery} from '../../../preference/state/preference.query'
@@ -85,6 +85,7 @@ export class OrderBookService {
     this.signerService.ensureAuth,
     this.sessionQuery.address$,
   ]).pipe(
+    shareReplay(1),
     map(([contract, _signer]) => contract),
     switchMap(contract => merge(
       of(undefined),
@@ -93,7 +94,6 @@ export class OrderBookService {
       contractEvent(contract, contract.filters.OrderSettled(this.sessionQuery.getValue().address!)),
     ).pipe(
       map(() => contract),
-      share()
     )),
   )
 
@@ -110,6 +110,7 @@ export interface PortfolioItem {
   stockId: string;
   stockName: string;
   stockSymbol: string;
+  stockAddress: string;
   balance: BigNumber;
 }
 
@@ -121,7 +122,7 @@ interface Stock {
 
 export interface Order {
   orderId: BigNumber;
-  orderType: number;
+  orderType: OrderType;
   stockId: string;
   stockName: string;
   stockSymbol: string;
@@ -132,4 +133,9 @@ export interface Order {
   settledTokenAmount: BigNumber;
   createdAt: BigNumber;
   settledAt: BigNumber;
+}
+
+export enum OrderType {
+  BUY = 0,
+  SELL = 1
 }

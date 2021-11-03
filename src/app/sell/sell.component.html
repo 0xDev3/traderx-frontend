@@ -29,17 +29,17 @@
 
               <div class="flex flex-col gap-2 min-h-[1rem] mt-1">
                 <ng-container *ngIf="sellForm.dirty && sellForm.invalid">
-                 <span class="text-red-600 text-xs font-semibold">
-                   <ng-container *ngIf="sellForm.errors?.stockAmountTooLow">
-                     The amount cannot be less than one share.
-                   </ng-container>
-                   <ng-container *ngIf="sellForm.errors?.overBalance">
-                     Not enough shares to sell.
-                   </ng-container>
-                   <ng-container *ngIf="sellForm.errors?.fractionalNotAllowed">
-                     Fractional shares are not allowed. Enter whole numbers.
-                   </ng-container>
-                </span>
+                  <span class="text-red-600 text-xs font-semibold">
+                    <ng-container *ngIf="sellForm.errors?.stockAmountTooLow">
+                      The amount cannot be less than one share.
+                    </ng-container>
+                    <ng-container *ngIf="sellForm.errors?.overBalance">
+                      Not enough shares to sell.
+                    </ng-container>
+                    <ng-container *ngIf="sellForm.errors?.fractionalNotAllowed">
+                      Fractional shares are not allowed. Enter whole numbers.
+                    </ng-container>
+                  </span>
                 </ng-container>
               </div>
 

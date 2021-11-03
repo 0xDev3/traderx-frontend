@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core'
 import {SessionQuery} from '../session/state/session.query'
-import {DialogService} from '../shared/services/dialog.service'
 import {WithStatus, withStatus} from '../shared/utils/observables'
 import {SignerService} from '../shared/services/signer.service'
 import {BackendBrokerService, ItemExtended} from '../shared/services/backend/backend-broker.service'
-import {Order, OrderBookService, PortfolioItem} from '../shared/services/blockchain/order-book.service'
+import {Order, OrderBookService, OrderType, PortfolioItem} from '../shared/services/blockchain/order-book.service'
 import {switchMap} from 'rxjs/operators'
 import {Observable} from 'rxjs'
 
@@ -15,6 +14,8 @@ import {Observable} from 'rxjs'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortfolioComponent {
+  orderType = OrderType
+
   pending$: Observable<WithStatus<ItemExtended<Order>[]>> = withStatus(
     this.orderBookService.pending$.pipe(
       switchMap(portfolio => this.backendBrokerService.extendPending(portfolio)),
@@ -27,10 +28,11 @@ export class PortfolioComponent {
     )
   )
 
-  constructor(private sessionQuery: SessionQuery,
-              private signerService: SignerService,
-              private orderBookService: OrderBookService,
-              private backendBrokerService: BackendBrokerService,
-              private dialogService: DialogService) {
+  constructor(
+    private sessionQuery: SessionQuery,
+    private signerService: SignerService,
+    private orderBookService: OrderBookService,
+    private backendBrokerService: BackendBrokerService
+  ) {
   }
 }

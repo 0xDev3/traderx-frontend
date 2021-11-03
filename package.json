@@ -38,7 +38,7 @@
     "@ngneat/tailwind": "^7.0.3",
     "@tailwindcss/forms": "^0.3.3",
     "browserify-zlib": "^0.2.0",
-    "ethers": "^5.1.4",
+    "ethers": "^5.4.7",
     "magic-sdk": "^6.1.0",
     "ngx-currency": "^2.5.2",
     "rxjs": "~6.6.0",

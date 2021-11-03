@@ -31,11 +31,11 @@
 
               <div class="flex items-center min-h-[1rem] mt-1">
                 <ng-container *ngIf="buyForm.dirty && buyForm.invalid">
-                 <span class="text-red-600 text-xs font-semibold">
-                  <ng-container *ngIf="buyForm.errors?.walletBalanceTooLow">
-                    Not enough funds. Please top up your wallet.
-                  </ng-container>
-                </span>
+                  <span class="text-red-600 text-xs font-semibold">
+                    <ng-container *ngIf="buyForm.errors?.walletBalanceTooLow">
+                      Not enough funds. Please top up your wallet.
+                    </ng-container>
+                  </span>
                 </ng-container>
               </div>
 
@@ -70,11 +70,11 @@
 
               <div class="flex flex-col gap-2 min-h-[1rem] mt-1">
                 <ng-container *ngIf="buyForm.dirty && buyForm.invalid">
-                 <span class="text-red-600 text-xs font-semibold">
-                  <ng-container *ngIf="buyForm.errors?.stockAmountTooLow">
-                    The amount cannot be less than one share.
-                  </ng-container>
-                </span>
+                  <span class="text-red-600 text-xs font-semibold">
+                    <ng-container *ngIf="buyForm.errors?.stockAmountTooLow">
+                      The amount cannot be less than one share.
+                    </ng-container>
+                  </span>
                 </ng-container>
 
                 <span *ngIf="isFractionalAmount(buyForm.get('stockAmount')?.value) && buyForm.valid"

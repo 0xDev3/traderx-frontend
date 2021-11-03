@@ -1,4 +1,4 @@
-<div class="max-w-6xl mx-auto px-4">
+<div class="w-full max-w-2xl mx-auto px-4">
   <div class="mt-6 rounded-3xl shadow-lg bg-white p-4 lg:p-6">
     <div class="flex flex-col">
       <b class="text-sm">Your balance:</b>
@@ -29,9 +29,10 @@
         </p>
         <div class="flex items-center">
           <ng-container *ngIf="(address$ | async) as address">
-            <span class="flex-grow-0 mr-6">Wallet address: {{ address | addrShort }}</span>
-            <app-value-copy [value]="address" [delay]="1500"
-                            textReady="Copy address" textCopied="Copied">
+            <span class="flex-grow-0">Wallet address: {{ address | addrShort }}</span>
+            <app-explorer-link [value]="address" class="ml-1">
+            </app-explorer-link>
+            <app-value-copy [value]="address" [delay]="800" class="ml-1">
             </app-value-copy>
           </ng-container>
         </div>
