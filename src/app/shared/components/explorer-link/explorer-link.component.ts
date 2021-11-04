@@ -31,4 +31,4 @@ export class ExplorerLinkComponent implements OnInit {
   }
 }
 
-type ExplorerLinkType = 'tx' | 'address'
+type ExplorerLinkType = 'tx' | 'address' | 'token'

@@ -77,7 +77,8 @@
                 <div class="self-center">
                   <div class="flex items-center font-semibold">
                     <span>{{ item.item.stockSymbol }}</span>
-                    <app-explorer-link [value]="item.item.stockAddress"></app-explorer-link>
+                    <app-explorer-link [value]="item.item.stockAddress" type="token">
+                    </app-explorer-link>
                   </div>
                   <div class="text-xs">
                     {{ item.item.stockName }}
