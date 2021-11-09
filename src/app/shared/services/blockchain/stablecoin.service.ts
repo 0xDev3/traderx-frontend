@@ -98,7 +98,7 @@ export class StablecoinService {
       switchMap(tx => this.signerService.sendTransaction(tx)),
       switchMap(tx => this.dialogService.loading(
         from(this.sessionQuery.provider.waitForTransaction(tx.hash)),
-        'Processing transaction...',
+        'Approving funds for trading',
       )),
     )
   }

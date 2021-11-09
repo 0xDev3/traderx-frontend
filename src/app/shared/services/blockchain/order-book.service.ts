@@ -46,7 +46,7 @@ export class OrderBookService {
       switchMap(tx => this.signerService.sendTransaction(tx)),
       switchMap(tx => this.dialogService.loading(
         from(this.sessionQuery.provider.waitForTransaction(tx.hash)),
-        'Processing transaction...',
+        'Creating buy order',
       )),
     )
   }
@@ -69,7 +69,7 @@ export class OrderBookService {
       switchMap(tx => this.signerService.sendTransaction(tx)),
       switchMap(tx => this.dialogService.loading(
         from(this.sessionQuery.provider.waitForTransaction(tx.hash)),
-        'Processing transaction...',
+        'Creating sell order',
       )),
     )
   }

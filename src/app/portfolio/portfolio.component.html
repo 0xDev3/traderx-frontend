@@ -28,15 +28,17 @@
                 </div>
 
                 <div class="flex gap-4 flex-wrap items-center">
-                  <div class="w-20 text-right">
+                  <div class="text-right">
                     <span class="font-semibold">
                       <ng-container *ngIf="item.item.orderType === orderType.BUY">
-                        to buy for {{ item.item.amount | formatUnit:'bignumToWei' | currencyDefault }}
+                        Settling buy order for {{ item.item.amount | formatUnit:'bignumToWei' | currencyDefault }}
                       </ng-container>
 
                       <ng-container *ngIf="item.item.orderType === orderType.SELL">
-                        to sell {{ item.item.amount | formatUnit:'bignumToWei' }} share(s)
+                        Settling sell order for {{ item.item.amount | formatUnit:'bignumToWei' }} share(s)
                       </ng-container>
+
+                      <app-spinner type="inline-xs"></app-spinner>
                     </span>
                   </div>
 
