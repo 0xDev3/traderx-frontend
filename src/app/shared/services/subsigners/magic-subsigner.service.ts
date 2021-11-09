@@ -8,6 +8,7 @@ import {PreferenceQuery} from '../../../preference/state/preference.query'
 import {SDKBase} from '@magic-sdk/provider/dist/types/core/sdk'
 import {AuthMagicComponent, MagicLoginInput} from '../../../auth/auth-magic/auth-magic.component'
 import {MatDialog} from '@angular/material/dialog'
+import {environment} from '../../../../environments/environment'
 
 @Injectable({
   providedIn: 'root',
@@ -52,7 +53,7 @@ export class MagicSubsignerService implements Subsigner {
         /* webpackChunkName: "magic-sdk" */
         'magic-sdk')).pipe(
       map((lib) => {
-        return new lib.Magic('pk_test_A68B58AEF464EF47', { // TODO: extract key to env variable
+        return new lib.Magic(environment.magicApiKey, {
           network: {
             chainId: this.preferenceQuery.network.chainID,
             rpcUrl: this.preferenceQuery.network.rpcURLs[0],
@@ -68,7 +69,7 @@ export class MagicSubsignerService implements Subsigner {
                              opts: SubsignerLoginOpts): Observable<providers.JsonRpcSigner> {
     return of(opts.force).pipe(
       concatMap(force => force ?
-        this.forceLogin :
+        this.forceLogin(opts) :
         from(this.subprovider!.user.isLoggedIn())
       ),
       concatMap(authRes => authRes ? of(authRes) : throwError('NO_ADDRESS')),
@@ -76,11 +77,21 @@ export class MagicSubsignerService implements Subsigner {
     )
   }
 
-  private get forceLogin(): Observable<boolean> {
-    return this.matDialog.open(AuthMagicComponent).afterClosed().pipe(
-      switchMap((input: MagicLoginInput) => this.subprovider!.auth.loginWithMagicLink({email: input.email})),
+  private forceLogin(opts: SubsignerLoginOpts): Observable<boolean> {
+    return this.getEmail(opts).pipe(
+      switchMap(email => this.subprovider!.auth.loginWithMagicLink({email})),
       map(res => !!res),
       catchError(() => of(false))
+    )
+  }
+
+  private getEmail(opts: SubsignerLoginOpts): Observable<string> {
+    return opts.email ? of(opts.email) : this.getEmailWithDialog()
+  }
+
+  private getEmailWithDialog(): Observable<string> {
+    return this.matDialog.open(AuthMagicComponent).afterClosed().pipe(
+      switchMap((input: MagicLoginInput) => input.email),
     )
   }
 }

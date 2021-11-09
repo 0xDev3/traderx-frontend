@@ -32,7 +32,7 @@ export const MumbaiNetwork: Network = {
     symbol: 'MATIC',
   },
   defaultStableCoin: '0x05c87f0e8b7a794731828c5D4a5634Bb1CB7aBB2',
-  orderBook: '0x312aE0F9739E7f28A04561E00D7280986E7CE725',
+  orderBook: '0xb6B665BE8bb357e9b41b1cf3d0CAcE53ccE9c81e',
   maxGasPrice: 20,
   rpcURLs: ['https://rpc-mumbai.maticvigil.com'],
   explorerURLs: ['https://mumbai.polygonscan.com/'],

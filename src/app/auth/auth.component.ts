@@ -9,6 +9,7 @@ import {MatDialogRef} from '@angular/material/dialog'
 import {RouterService} from '../shared/services/router.service'
 import {getWindow} from '../shared/utils/browser'
 import {MagicSubsignerService} from '../shared/services/subsigners/magic-subsigner.service'
+import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 
 @Component({
   selector: 'app-auth',
@@ -17,6 +18,8 @@ import {MagicSubsignerService} from '../shared/services/subsigners/magic-subsign
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent {
+  emailForm: FormGroup
+
   injectedWeb3$: Observable<any> = defer(() => of(getWindow()?.ethereum))
 
   constructor(private signer: SignerService,
@@ -25,7 +28,11 @@ export class AuthComponent {
               private magicSubsignerService: MagicSubsignerService,
               private preferenceQuery: PreferenceQuery,
               private router: RouterService,
+              private fb: FormBuilder,
               @Optional() private dialogRef: MatDialogRef<AuthComponent>) {
+    this.emailForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    })
   }
 
   afterLoginActions() {
@@ -39,7 +46,9 @@ export class AuthComponent {
   }
 
   connectMagic(): Observable<unknown> {
-    return this.signer.login(this.magicSubsignerService).pipe(
+    return this.signer.login(this.magicSubsignerService, {
+      email: this.emailForm.value.email, force: true
+    }).pipe(
       tap(() => this.afterLoginActions()),
     )
   }

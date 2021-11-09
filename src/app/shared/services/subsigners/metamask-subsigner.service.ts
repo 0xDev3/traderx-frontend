@@ -82,6 +82,7 @@ export interface Subsigner {
 }
 
 export interface SubsignerLoginOpts {
+  email?: string;
   wallet?: string;
   force?: boolean;
 }

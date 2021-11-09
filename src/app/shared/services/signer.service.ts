@@ -11,6 +11,7 @@ import {MatDialog} from '@angular/material/dialog'
 import {AuthComponent} from '../../auth/auth.component'
 import {RouterService} from './router.service'
 import {ErrorService} from './error.service'
+import {PreferenceQuery} from '../../preference/state/preference.query'
 
 @Injectable({
   providedIn: 'root',
@@ -45,6 +46,7 @@ export class SignerService {
 
   constructor(private sessionStore: SessionStore,
               private sessionQuery: SessionQuery,
+              private preferenceQuery: PreferenceQuery,
               private preferenceStore: PreferenceStore,
               private metamaskSubsignerService: MetamaskSubsignerService,
               private ngZone: NgZone,
@@ -72,6 +74,21 @@ export class SignerService {
           map(() => this.sessionQuery.signer!),
         ),
       ),
+    )
+  }
+
+  get ensureNetwork(): Observable<void> {
+    if (!this.sessionQuery.signer) return of(undefined)
+
+    return from(this.sessionQuery.signer.getChainId()).pipe(
+      switchMap(chainId => {
+        if (chainId !== this.preferenceQuery.network.chainID) {
+          return this.logout()
+        }
+
+        return of(undefined)
+      }),
+      map(() => undefined)
     )
   }
 
@@ -167,6 +184,7 @@ export class SignerService {
 }
 
 interface LoginOpts {
+  email?: string;
   wallet?: string;
   force?: boolean;
 }

@@ -60,7 +60,9 @@ export class ActionButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadingText ||= this.text
+    if (this.loadingText === undefined) {
+      this.loadingText = this.text
+    }
   }
 
   ngOnDestroy(): void {

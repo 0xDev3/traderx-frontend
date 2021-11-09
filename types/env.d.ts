@@ -17,5 +17,6 @@ export interface Window {
 
 interface PostBuildEnv {
   BACKEND_URL: string
+  MAGIC_API_KEY: string
   FIXED_CHAIN_ID: string
 }

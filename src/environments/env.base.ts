@@ -8,7 +8,8 @@ export const environment = {
   production: false,
   commitHash: preBuildEnv.COMMIT_HASH,
   appVersion: preBuildEnv.APP_VERSION,
-  backendURL: postBuildEnv?.BACKEND_URL || 'https://eth-staging.ampnet.io',
+  backendURL: postBuildEnv?.BACKEND_URL || 'https://demo-trade.ampnet.io',
+  magicApiKey: postBuildEnv?.MAGIC_API_KEY || 'pk_live_4E52CA31683F06D5',
   fixed: {
     chainID: (postBuildEnv?.FIXED_CHAIN_ID ? Number(postBuildEnv?.FIXED_CHAIN_ID) : undefined),
   },

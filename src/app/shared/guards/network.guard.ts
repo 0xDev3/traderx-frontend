@@ -6,6 +6,8 @@ import {PreferenceQuery} from '../../preference/state/preference.query'
 import {PreferenceStore} from '../../preference/state/preference.store'
 import {ChainID, Networks} from '../networks'
 import {StablecoinService} from '../services/blockchain/stablecoin.service'
+import {SessionQuery} from '../../session/state/session.query'
+import {SignerService} from '../services/signer.service'
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +15,8 @@ import {StablecoinService} from '../services/blockchain/stablecoin.service'
 export class NetworkGuard implements CanActivate {
   constructor(private preferenceQuery: PreferenceQuery,
               private preferenceStore: PreferenceStore,
+              private sessionQuery: SessionQuery,
+              private signerService: SignerService,
               private stablecoin: StablecoinService) {
   }
 
@@ -29,6 +33,7 @@ export class NetworkGuard implements CanActivate {
           })
         }
       }),
+      switchMap(() => this.signerService.ensureNetwork),
       // this is needed to reload the latest issuer config
       switchMap(() => combineLatest([this.stablecoin.contract$]).pipe(take(1))),
       switchMap(() => of(true)),

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core'
-import {defer, EMPTY, Observable, of, throwError} from 'rxjs'
+import {EMPTY, Observable, of, throwError} from 'rxjs'
 import {catchError, switchMap, tap} from 'rxjs/operators'
 import {HttpErrorResponse} from '@angular/common/http'
 import {JwtTokenService} from './backend/jwt-token.service'
@@ -30,6 +30,10 @@ export class ErrorService {
 
       if ((errorRes as any).code === 'UNPREDICTABLE_GAS_LIMIT') {
         errorRes = errorRes.error
+      }
+
+      if (errorRes.message.includes('Magic RPC Error')) {
+        errorRes = errorRes.message as any
       }
 
       if (errorRes.error instanceof ErrorEvent) { // client-side error
@@ -79,14 +83,8 @@ export class ErrorService {
         } else {
           action$ = this.displayMessage('Something went wrong.')
         }
-      } else if (err?.message?.includes('cannot estimate gas')) { // Venly out of gas
+      } else if (err?.message?.includes('cannot estimate gas')) { // dry run error
         action$ = this.displayMessage(this.outOfGasMessage)
-      } else if (this.isPopupBlocker(err)) {
-        action$ = defer(() => of(
-          this.snackbar.open('Pop-ups blocked. Allow pop-ups for this site and try again.', undefined, {
-            duration: 3000,
-          })),
-        )
       }
 
       if (completeAfterAction) {
@@ -105,23 +103,8 @@ export class ErrorService {
     return this.dialogService.error(message)
   }
 
-  private isPopupBlocker(err: any): boolean {
-    // Pop-up Venly issue in Safari and Firefox;
-    // Firefox. Happens every time when there is network request between user click and open pop-up action.
-    // In this case, pop-up blocker must be explicitly disabled.
-    // Safari. Happens sometimes when Venly backend requests are too long. Usually proceeds with
-    // the second click when the request is much quicker.
-
-    const popupErrors = [
-      'Something went wrong while trying to open the popup',
-      'You provided an invalid object where a stream was expected. You can provide an Observable, Promise, Array, or Iterable.',
-    ]
-
-    return !!(err?.message && popupErrors.some(error => err!.message.includes(error)))
-  }
-
   private get outOfGasMessage() {
-    return 'Not enough gas to execute the transaction. Check out the FAQ page for more info.'
+    return 'Not enough gas to execute the transaction.'
   }
 }
 
