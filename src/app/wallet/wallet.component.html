@@ -18,7 +18,15 @@
               <app-spinner></app-spinner>
             </ng-container>
           </ng-container>
+
+          <app-explorer-link [value]="stablecoin.address" type="token"
+                             class="ml-0.5">
+          </app-explorer-link>
+          <app-add-to-metamask [value]="stablecoin.address"
+                               class="ml-0.5">
+          </app-add-to-metamask>
         </span>
+
 
         <div class="flex items-center justify-between space-x-2 mt-2 lg:mt-0">
         </div>

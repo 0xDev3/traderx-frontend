@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core'
-import {from, Observable, of, throwError, zip} from 'rxjs'
+import {combineLatest, from, Observable, of, throwError, zip} from 'rxjs'
 import {providers} from 'ethers'
-import {catchError, concatMap, map, tap} from 'rxjs/operators'
+import {catchError, concatMap, map, switchMap, tap} from 'rxjs/operators'
 import {MetamaskNetworks} from '../../networks'
 import {AuthProvider, PreferenceStore} from '../../../preference/state/preference.store'
 import {getWindow} from '../../utils/browser'
+import {ERC20__factory} from '../../../../../types/ethers-contracts'
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,23 @@ export class MetamaskSubsignerService implements Subsigner {
     )
   }
 
+  watchAsset(signer: providers.JsonRpcSigner, assetAddress: string): Observable<boolean> {
+    return of(ERC20__factory.connect(assetAddress, signer)).pipe(
+      switchMap(contract => of(contract).pipe(
+        switchMap(contract => combineLatest([contract.decimals(), contract.symbol()])),
+        map(([decimals, symbol]) => ({
+          type: 'ERC20',
+          options: {
+            address: assetAddress,
+            decimals,
+            symbol
+          }
+        } as WatchAssetParams)),
+        switchMap(params => signer.provider.send('wallet_watchAsset', params as any))
+      )),
+    )
+  }
+
   private loginGetAddress(signer: providers.JsonRpcSigner, opts: SubsignerLoginOpts): Observable<string> {
     return from(signer.getAddress()).pipe(
       catchError(() => opts.force ? from(signer.provider.send('eth_requestAccounts', [])).pipe(
@@ -86,3 +104,15 @@ export interface SubsignerLoginOpts {
   wallet?: string;
   force?: boolean;
 }
+
+
+interface WatchAssetParams {
+  type: 'ERC20'; // In the future, other standards will be supported
+  options: {
+    address: string; // The address of the token contract
+    'symbol': string; // A ticker symbol or shorthand, up to 5 characters
+    decimals: number; // The number of token decimals
+    image: string; // A string url of the token logo
+  };
+}
+

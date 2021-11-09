@@ -55,6 +55,7 @@ import {BuyComponent} from './buy/buy.component'
 import {SellComponent} from './sell/sell.component'
 import {CurrInputDirective} from './shared/directives/curr-input.directive'
 import {ExplorerLinkComponent} from './shared/components/explorer-link/explorer-link.component'
+import {AddToMetamaskComponent} from './shared/components/add-to-metamask/add-to-metamask.component'
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import {ExplorerLinkComponent} from './shared/components/explorer-link/explorer-
     BuyComponent,
     SellComponent,
     ExplorerLinkComponent,
+    AddToMetamaskComponent,
   ],
   imports: [
     BrowserModule,

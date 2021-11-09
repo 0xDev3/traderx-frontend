@@ -1,6 +1,6 @@
 import {Injectable, NgZone} from '@angular/core'
 import {providers, utils} from 'ethers'
-import {from, fromEvent, merge, Observable, of, Subject, throwError} from 'rxjs'
+import {defer, from, fromEvent, merge, Observable, of, Subject, throwError} from 'rxjs'
 import {catchError, concatMap, finalize, map, switchMap, take, tap} from 'rxjs/operators'
 import {SessionStore} from '../../session/state/session.store'
 import {SessionQuery} from '../../session/state/session.query'
@@ -12,6 +12,7 @@ import {AuthComponent} from '../../auth/auth.component'
 import {RouterService} from './router.service'
 import {ErrorService} from './error.service'
 import {PreferenceQuery} from '../../preference/state/preference.query'
+import {getWindow} from '../utils/browser'
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,8 @@ export class SignerService {
     )),
     tap(action => this.ngZone.run(() => action())),
   )
+
+  injectedWeb3$: Observable<any> = defer(() => of(getWindow()?.ethereum))
 
   constructor(private sessionStore: SessionStore,
               private sessionQuery: SessionQuery,

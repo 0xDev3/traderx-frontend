@@ -15,11 +15,12 @@ import {GasService} from './gas.service'
   providedIn: 'root',
 })
 export class StablecoinService {
+  address = this.preferenceQuery.network.defaultStableCoin
   contract$ = combineLatest([
     this.sessionQuery.provider$,
   ]).pipe(
     distinctUntilChanged(),
-    map(([provider]) => ERC20__factory.connect(this.preferenceQuery.network.defaultStableCoin, provider)),
+    map(([provider]) => ERC20__factory.connect(this.address, provider)),
     switchMap(contract => of(contract).pipe(
       switchMap(contract => combineLatest([contract.decimals(), contract.symbol()])),
       tap(([decimals, symbol]) => {

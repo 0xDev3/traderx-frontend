@@ -11,7 +11,7 @@
             <div *ngFor="let item of pendingData"
                  class="px-1 py-2">
               <div class="flex justify-between flex-wrap">
-                <div class="w-48 flex gap-4 flex-wrap">
+                <div class="w-56 flex gap-4 flex-wrap">
                   <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
                     <img class="h-full w-full object-contain"
                          src="/assets/stock.png"
@@ -68,7 +68,7 @@
           <div *ngFor="let item of portfolioData"
                class="px-1 py-2">
             <div class="flex justify-between flex-wrap">
-              <div class="w-48 flex gap-4 flex-wrap">
+              <div class="w-56 flex gap-4 flex-wrap">
                 <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
                   <img class="h-full w-full object-contain"
                        src="/assets/stock.png"
@@ -77,8 +77,12 @@
                 <div class="self-center">
                   <div class="flex items-center font-semibold">
                     <span>{{ item.item.stockSymbol }}</span>
-                    <app-explorer-link [value]="item.item.stockAddress" type="token">
+                    <app-explorer-link [value]="item.item.stockAddress" type="token"
+                                       class="ml-0.5">
                     </app-explorer-link>
+                    <app-add-to-metamask [value]="item.item.stockAddress"
+                                         class="ml-0.5">
+                    </app-add-to-metamask>
                   </div>
                   <div class="text-xs">
                     {{ item.item.stockName }}
