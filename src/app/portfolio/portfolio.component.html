@@ -11,7 +11,7 @@
             <div *ngFor="let item of pendingData"
                  class="px-1 py-2">
               <div class="flex justify-between gap-2">
-                <div class="w-56 flex gap-4 flex-wrap">
+                <div class="flex gap-4 flex-wrap">
                   <div class="hidden sm:block w-12 h-12 bg-white rounded-full overflow-hidden">
                     <img class="h-full w-full object-contain"
                          src="/assets/stock.png"
@@ -103,11 +103,14 @@
                   <button class="bg-blue-900 text-white px-2 py-2 rounded-full
                                    text-xs uppercase"
                           [routerLink]="('/sell/' + item.item.stockId) | networkPath">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         class="sm:hidden h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor"
+                         class="sm:hidden h-4 w-4">
+                      <path
+                        d="M16 11V7c0-1.06087-.4214-2.07828-1.1716-2.82843C14.0783 3.42143 13.0609 3 12 3c-1.0609 0-2.07828.42143-2.82843 1.17157C8.42143 4.92172 8 5.93913 8 7v4h8ZM5 9h14l1 12H4L5 9Z"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M23 1 1 23" stroke-width="2" stroke-linecap="round"/>
                     </svg>
+
                     <span class="hidden sm:inline px-4 font-semibold">
                       Sell
                     </span>
