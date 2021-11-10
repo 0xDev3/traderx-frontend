@@ -1,4 +1,4 @@
-<div class="w-full h-full flex justify-center mt-8 px-2">
+<div class="w-full h-full flex justify-center mt-8 px-4">
   <div class="w-full max-w-2xl mx-auto">
     <ng-container *ngIf="(pending$ | async) as pendingRes">
       <ng-container *ngIf="pendingRes.value as pendingData">
@@ -10,9 +10,9 @@
           <div class="flex flex-col divide-y-2">
             <div *ngFor="let item of pendingData"
                  class="px-1 py-2">
-              <div class="flex justify-between flex-wrap">
+              <div class="flex justify-between gap-2">
                 <div class="w-56 flex gap-4 flex-wrap">
-                  <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+                  <div class="hidden sm:block w-12 h-12 bg-white rounded-full overflow-hidden">
                     <img class="h-full w-full object-contain"
                          src="/assets/stock.png"
                          alt="Logo">
@@ -41,9 +41,6 @@
                       <app-spinner type="inline-xs"></app-spinner>
                     </span>
                   </div>
-
-                  <div class="">
-                  </div>
                 </div>
               </div>
             </div>
@@ -69,9 +66,9 @@
         <div class="flex flex-col divide-y-2">
           <div *ngFor="let item of portfolioData"
                class="px-1 py-2">
-            <div class="flex justify-between flex-wrap">
-              <div class="w-56 flex gap-4 flex-wrap">
-                <div class="w-12 h-12 bg-white rounded-full overflow-hidden">
+            <div class="flex justify-between">
+              <div class="flex gap-4 flex-wrap">
+                <div class="hidden sm:block w-12 h-12 bg-white rounded-full overflow-hidden">
                   <img class="h-full w-full object-contain"
                        src="/assets/stock.png"
                        alt="Logo">
@@ -92,8 +89,8 @@
                 </div>
               </div>
 
-              <div class="flex gap-4 flex-wrap items-center">
-                <div class="w-16 text-right flex flex-col">
+              <div class="flex gap-4 items-center">
+                <div class="text-right flex flex-col">
                   <span class="font-semibold">
                     {{ item.item.balance | formatUnit:'bignumToWei' | number }}
                   </span>
@@ -103,10 +100,17 @@
                 </div>
 
                 <div class="">
-                  <button class="bg-blue-900 text-white px-6 py-2 rounded-full
-                                   text-xs uppercase font-semibold"
+                  <button class="bg-blue-900 text-white px-2 py-2 rounded-full
+                                   text-xs uppercase"
                           [routerLink]="('/sell/' + item.item.stockId) | networkPath">
-                    Sell
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="sm:hidden h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    <span class="hidden sm:inline px-4 font-semibold">
+                      Sell
+                    </span>
                   </button>
                 </div>
               </div>
