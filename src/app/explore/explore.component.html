@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="flex gap-4 items-center">
-                  <div class="font-semibold"
+                  <div class="font-semibold text-right"
                        [ngClass]="item.priceChange24h < 0 ? 'text-red-500' : 'text-green-600'">
                     <div class="">
                       {{ (item.price * item.priceChange24h) | currencyDefault }}

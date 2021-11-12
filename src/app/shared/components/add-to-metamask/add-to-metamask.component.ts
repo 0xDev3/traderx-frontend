@@ -3,10 +3,9 @@ import {PreferenceQuery} from '../../../preference/state/preference.query'
 import {MetamaskSubsignerService} from '../../services/subsigners/metamask-subsigner.service'
 import {SignerService} from '../../services/signer.service'
 import {map} from 'rxjs/operators'
-import {Observable} from 'rxjs'
+import {combineLatest, EMPTY, Observable} from 'rxjs'
 import {SessionQuery} from '../../../session/state/session.query'
-import {providers} from 'ethers'
-import {getWindow} from '../../utils/browser'
+import {AuthProvider} from '../../../preference/state/preference.store'
 
 @Component({
   selector: 'app-add-to-metamask',
@@ -17,8 +16,13 @@ import {getWindow} from '../../utils/browser'
 export class AddToMetamaskComponent {
   @Input() value = ''
 
-  isAvailable$: Observable<boolean> = this.signer.injectedWeb3$.pipe(
-    map(ethereum => !!ethereum.isMetaMask)
+  isAvailable$: Observable<boolean> = combineLatest([
+    this.signer.injectedWeb3$,
+    this.sessionQuery.authProvider$,
+  ]).pipe(
+    map(([ethereum, authProvider]) =>
+      !!ethereum.isMetaMask && authProvider === AuthProvider.METAMASK
+    )
   )
 
   constructor(
@@ -29,8 +33,11 @@ export class AddToMetamaskComponent {
   ) {
   }
 
-  watchAsset() {
-    const signer = new providers.Web3Provider(getWindow()?.ethereum, 'any').getSigner()
-    this.metamaskSubsignerService.watchAsset(signer, this.value).subscribe()
+  watchAsset(): Observable<unknown> {
+    const signer = this.sessionQuery.signer
+
+    if (!signer) return EMPTY
+
+    return this.metamaskSubsignerService.watchAsset(signer, this.value)
   }
 }
