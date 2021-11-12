@@ -45,9 +45,13 @@ export class MetamaskSubsignerService implements Subsigner {
   ): Observable<unknown> {
     return from(signer.provider.send('wallet_switchEthereumChain',
       [{chainId: MetamaskNetworks[this.preferenceStore.getValue().chainID].chainId}])).pipe(
-      catchError(err => err.code === 4902 ? this.addEthereumChain(signer).pipe(
-        concatMap(() => this.checkChainID(signer, opts)),
-      ) : throwError('UNHANDLED_SWITCH_CHAIN_ERROR')),
+      // TODO: wait for issue fix: https://github.com/MetaMask/metamask-mobile/issues/3312
+      // catchError(err => err.code === 4902 ? this.addEthereumChain(signer).pipe(
+      //   concatMap(() => this.checkChainID(signer, opts)),
+      // ) : throwError('UNHANDLED_SWITCH_CHAIN_ERROR')),
+      catchError(() => this.addEthereumChain(signer).pipe(
+        concatMap(() => this.checkChainID(signer, opts))
+      ))
     ).pipe(catchError(() => throwError('CANNOT_SWITCH_CHAIN')))
   }
 
