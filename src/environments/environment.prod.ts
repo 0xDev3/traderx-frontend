@@ -8,5 +8,5 @@ const postBuildEnv = getWindow().env as PostBuildEnv
 export const environment = {
   ...baseEnvironment,
   production: true,
-  backendURL: postBuildEnv?.BACKEND_URL || 'https://demo-trade.ampnet.io',
+  backendURL: postBuildEnv?.BACKEND_URL || 'https://trade-demo.ampnet.io',
 }
